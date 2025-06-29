@@ -1,6 +1,6 @@
 import pandas as pd
 
-def clean_reviews(input_file='data/product_reviews.xlsx', output_file='data/cleaned_reviews.csv'):
+def analyze_products(input_file='data/product_reviews.xlsx', output_file='data/cleaned_reviews.csv'):
     df = pd.read_excel(input_file, engine='openpyxl')
 
     print("[DEBUG] Columns found:", df.columns.tolist())
