@@ -1,0 +1,21 @@
+# Byte-compiled / cache files
+__pycache__/
+*.pyc
+
+# Environment variables
+.env/
+
+# Jupyter
+*.ipynb_checkpoints/
+
+# Data outputs
+data/*.csv
+data/*.xlsx
+
+# Model artifacts
+*.joblib
+*.pkl
+
+# OS/System files
+.DS_Store
+Thumbs.db
