@@ -1,5 +1,3 @@
-# src/generate_reports.py
-
 from preprocess import clean_reviews
 from sentiment_model import train_and_predict
 from product_analysis import analyze_products
