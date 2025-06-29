@@ -1,22 +1,26 @@
 import pandas as pd
 
-def analyze_products(input_file='data/product_reviews.xlsx', output_file='data/cleaned_reviews.csv'):
-    df = pd.read_excel(input_file, engine='openpyxl')
+def analyze_products(input_file='data/predicted_reviews.csv'):
+    df = pd.read_csv(input_file)
 
-    print("[DEBUG] Columns found:", df.columns.tolist())
+    # Group by product and category
+    summary = df.groupby(['product', 'categories']).agg({
+        'predicted_sentiment': lambda x: (x == 'positive').sum(),
+        'rating': ['mean', 'count']
+    }).reset_index()
 
-    # Drop rows missing key info
-    df.dropna(subset=['product', 'rating', 'categories', 'reviews'], inplace=True)
+    # Rename columns
+    summary.columns = ['product', 'category', 'positive_reviews', 'avg_rating', 'total_reviews']
 
-    # Clean review text
-    df['review_text'] = df['reviews'].astype(str).str.strip().str.lower()
+    # Best-selling = most reviews and high rating
+    best = summary.sort_values(['total_reviews', 'avg_rating'], ascending=False).head(10)
+    best.to_csv('reports/best_selling_products.csv', index=False)
 
-    # Create sentiment label
-    df['sentiment'] = df['rating'].apply(lambda x: 'positive' if x >= 4 else 'negative')
+    # Least-selling = low positive sentiment and low rating
+    least = summary.sort_values(['positive_reviews', 'avg_rating'], ascending=True).head(10)
+    least.to_csv('reports/least_selling_products.csv', index=False)
 
-    # Save cleaned data
-    df.to_csv(output_file, index=False)
-    print(f"[✅] Cleaned data saved to {output_file}")
+    print("[✅] Product reports generated in /reports/")
 
 if __name__ == "__main__":
-    clean_reviews()
+    analyze_products()
